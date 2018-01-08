@@ -26,7 +26,7 @@ public class BoardFragment extends Fragment {
         size=getActivity().getIntent().getIntExtra("size",1);
         switch (size){
             case 1:
-                board=new Board(9,9);
+                board = new Board(9,9);
                 numberColumn=9;
                 break;
             case 2:
@@ -36,14 +36,16 @@ public class BoardFragment extends Fragment {
             case 3:
                 board = new Board(22,16);
                 numberColumn=16;
+                break;
             default:
-                board=new Board(9,9);
+                board = new Board(9,9);
                 numberColumn=9;
                 break;
         }
         mineBoard=(GridView)v.findViewById(R.id.mineBoard);
         mineBoard.setNumColumns(numberColumn);
         mineBoard.setAdapter(new BackSquareAdapter(this.getContext(),board));
+
         buttonGridView=(GridView)v.findViewById(R.id.buttonGridView);
         buttonGridView.setNumColumns(numberColumn);
         buttonGridView.setAdapter(new FrontSquareAdapter(this.getContext(),board));

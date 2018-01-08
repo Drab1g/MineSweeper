@@ -69,9 +69,9 @@ public class FrontSquareAdapter extends BaseAdapter{
                                         View b =  parent.getChildAt((board.getCols() * i) + j);
                                         b.setVisibility(View.GONE);
                                         boolean l = (j - 1) >= 0;
-                                        boolean r = (j + 1) < board.getRows();
+                                        boolean r = (j + 1) < board.getCols();
                                         boolean u = (i - 1) >= 0;
-                                        boolean d = (i + 1) < board.getCols();
+                                        boolean d = (i + 1) < board.getRows();
 
                                         if (u) {
                                             parent.getChildAt((board.getCols() * (i-1)) + j).setVisibility(View.GONE);

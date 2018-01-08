@@ -22,6 +22,18 @@ public class Board {
 
     public void fillMines() {
         int needed = 10;
+        switch(cols){
+            case 9:
+                needed = 10;
+                break;
+            case 12:
+                needed = 25;
+                break;
+            case 16:
+                needed = 40;
+                break;
+        }
+
         while (needed > 0) {
             int x = (int) Math.floor(Math.random() * rows);
             int y = (int) Math.floor(Math.random() * cols);

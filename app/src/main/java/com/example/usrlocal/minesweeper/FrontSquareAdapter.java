@@ -13,11 +13,14 @@ public class FrontSquareAdapter extends BaseAdapter{
     Context context;
     int size;
     Board board;
+    boolean []flaggedSquare;
 
     public FrontSquareAdapter(Context context, Board board){
         this.context=context;
         this.board=board;
         this.size=board.getRows()*board.getCols();
+        flaggedSquare= new boolean[size];
+
     }
 
     @Override

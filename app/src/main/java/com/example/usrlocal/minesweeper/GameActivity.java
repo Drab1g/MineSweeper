@@ -1,25 +1,22 @@
 package com.example.usrlocal.minesweeper;
 
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.FrameLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 
 public class GameActivity extends AppCompatActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
-        int size = getIntent().getIntExtra("size",1);
-        FragmentManager fm = getSupportFragmentManager();
-        BoardFragment frag = new BoardFragment();
-        Bundle args = new Bundle();
-        args.putLong("size", size);
-        frag.setArguments(args);
-        fm.beginTransaction().add(R.id.boardContainer,frag).commit();
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_game);
+    int size = getIntent().getIntExtra("size", 1);
+    FragmentManager fm = getSupportFragmentManager();
+    BoardFragment frag = new BoardFragment();
+    Bundle args = new Bundle();
+    args.putLong("size", size);
+    frag.setArguments(args);
+    fm.beginTransaction().add(R.id.boardContainer, frag).commit();
 
-    }
+  }
 }

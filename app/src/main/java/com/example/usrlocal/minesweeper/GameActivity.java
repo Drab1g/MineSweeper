@@ -10,13 +10,16 @@ public class GameActivity extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_game);
+
     int size = getIntent().getIntExtra("size", 1);
-    FragmentManager fm = getSupportFragmentManager();
-    BoardFragment frag = new BoardFragment();
+
     Bundle args = new Bundle();
     args.putLong("size", size);
-    frag.setArguments(args);
-    fm.beginTransaction().add(R.id.boardContainer, frag).commit();
 
+    BoardFragment frag = new BoardFragment();
+    frag.setArguments(args);
+
+    FragmentManager fm = getSupportFragmentManager();
+    fm.beginTransaction().add(R.id.boardContainer, frag).commit();
   }
 }

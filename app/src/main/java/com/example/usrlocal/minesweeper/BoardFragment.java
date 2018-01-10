@@ -9,46 +9,26 @@ import android.widget.GridView;
 
 public class BoardFragment extends Fragment {
 
-  GridView mineBoard;
+  GridView mineGridView;
   GridView buttonGridView;
-
-  int size = 1;
-  int numberColumn = 9;
-  Board board;
-
-  public BoardFragment() {
-  }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
-    View v = inflater.inflate(R.layout.fragment_board, container, false);
-    size = getActivity().getIntent().getIntExtra("size", 1);
-    switch (size) {
-      case 1:
-        board = new Board(9, 9);
-        numberColumn = 9;
-        break;
-      case 2:
-        board = new Board(16, 12);
-        numberColumn = 12;
-        break;
-      case 3:
-        board = new Board(22, 16);
-        numberColumn = 16;
-        break;
-      default:
-        board = new Board(9, 9);
-        numberColumn = 9;
-        break;
-    }
-    mineBoard = (GridView) v.findViewById(R.id.mineBoard);
-    mineBoard.setNumColumns(numberColumn);
-    mineBoard.setAdapter(new BackSquareAdapter(this.getContext(), board));
 
-    buttonGridView = (GridView) v.findViewById(R.id.buttonGridView);
-    buttonGridView.setNumColumns(numberColumn);
+    View view = inflater.inflate(R.layout.board_fragment, container, false);
+    String level = getArguments().getString("level");
+    GameSettings settings = GameSettings.valueOf(level);
+    GameBoard board = new GameBoard(settings);
+
+    mineGridView = (GridView) view.findViewById(R.id.mineGridView);
+    mineGridView.setNumColumns(settings.getCols());
+    mineGridView.setAdapter(new BackSquareAdapter(this.getContext(), board));
+
+    buttonGridView = (GridView) view.findViewById(R.id.buttonGridView);
+    buttonGridView.setNumColumns(settings.getCols());
     buttonGridView.setAdapter(new FrontSquareAdapter(this.getContext(), board));
-    return v;
+
+    return view;
   }
 }

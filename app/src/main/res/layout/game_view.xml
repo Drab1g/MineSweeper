@@ -10,7 +10,7 @@
     tools:context="com.example.usrlocal.minesweeper.GameActivity">
 
     <FrameLayout
-        android:id="@+id/boardContainer"
+        android:id="@+id/board_fragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">

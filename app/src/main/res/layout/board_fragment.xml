@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <GridView
-        android:id="@+id/mineBoard"
+        android:id="@+id/mineGridView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:horizontalSpacing="1dp"

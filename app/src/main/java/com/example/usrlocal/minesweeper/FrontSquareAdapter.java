@@ -37,7 +37,7 @@ public class FrontSquareAdapter extends BaseAdapter {
       button.setLayoutParams(new GridView.LayoutParams(squareSize, squareSize));
       button.setBackground(context.getDrawable(R.drawable.empty_button));
     }
-    
+
     // listening
     button.setOnClickListener(new View.OnClickListener() {
 
@@ -95,3 +95,4 @@ public class FrontSquareAdapter extends BaseAdapter {
     return position;
   }
 }
+

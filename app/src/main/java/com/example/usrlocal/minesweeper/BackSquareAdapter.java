@@ -9,8 +9,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 public class BackSquareAdapter extends BaseAdapter {
 
   private Context context;
@@ -103,3 +101,4 @@ public class BackSquareAdapter extends BaseAdapter {
     return i;
   }
 }
+

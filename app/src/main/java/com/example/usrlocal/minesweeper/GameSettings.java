@@ -8,7 +8,7 @@ public enum GameSettings {
 
   private int cols, rows, mines;
 
-  private GameSettings (int cols, int rows, int mines) {
+  GameSettings(int cols, int rows, int mines) {
     this.cols = cols;
     this.rows = rows;
     this.mines = mines;

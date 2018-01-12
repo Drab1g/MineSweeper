@@ -101,6 +101,8 @@ public class GameBoard {
     return cols * rows;
   }
 
+  public int getMine() { return mines; }
+
   public int getMines(int col, int row) {
     return this.board[col][row];
   }

@@ -13,6 +13,7 @@ public class FrontSquareAdapter extends BaseAdapter {
   Context context;
   GameBoard gameBoard;
   boolean[] flagBoard;
+  int clearedSquares=0;
 
   public FrontSquareAdapter(Context context, GameBoard gameBoard) {
     this.context = context;
@@ -22,7 +23,7 @@ public class FrontSquareAdapter extends BaseAdapter {
 
   @Override
   public View getView(final int position, View convertView, final ViewGroup parent) {
-    Button button;
+    final Button button;
 
     // recycling
     if (convertView instanceof Button) {
@@ -43,6 +44,14 @@ public class FrontSquareAdapter extends BaseAdapter {
 
       @Override
       public void onClick(View view) {
+
+        //simple click on a flagged button removes the flag
+        if(flagBoard[position]){
+          view.setBackground(context.getDrawable(R.drawable.empty_button));
+          flagBoard[position]=false;
+          return;
+        }
+
         int mines = gameBoard.getMines(position);
 
         switch (mines) {
@@ -57,12 +66,17 @@ public class FrontSquareAdapter extends BaseAdapter {
 
           // explode empty area
           case 0:
+            //clearedSquares-= number of exploded squares
             break;
 
-          // reveal what is underneath
+          // reveal what is underneath  and check if game is completed
           default:
             view.setVisibility(View.GONE);
-
+            clearedSquares-=1;
+            if (gameBoard.getSize() - gameBoard.getMine() == clearedSquares){
+              //TODO
+              //game completed, stop the timer and save the score
+            }
         }
       }
     });
@@ -72,6 +86,7 @@ public class FrontSquareAdapter extends BaseAdapter {
       @Override
       public boolean onLongClick(View view) {
         view.setBackground(context.getDrawable(R.drawable.flag_button));
+        flagBoard[position]=true;
         return true;
       }
 
@@ -94,5 +109,6 @@ public class FrontSquareAdapter extends BaseAdapter {
   public long getItemId(int position) {
     return position;
   }
+
 }
 

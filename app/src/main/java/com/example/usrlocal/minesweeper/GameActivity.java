@@ -24,12 +24,10 @@ public class GameActivity extends AppCompatActivity {
     @Override
     public void onServiceConnected(ComponentName name, IBinder iBinder) {
       myTimerUp = ((TimerUp.MyActivityBinder) iBinder).getService();
-      Log.d("marche ici", "la");
     }
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
-      Log.d("stop", "la");
       myTimerUp = null;
     }
   };
@@ -55,7 +53,8 @@ public class GameActivity extends AppCompatActivity {
 
     startService(serviceIntent);
     isRunning = true;
-    Log.d("ddddddfftrttt", "yyyy");
+
+
   }
 
   @Override
@@ -64,18 +63,6 @@ public class GameActivity extends AppCompatActivity {
     final Handler handler = new Handler();
     final int delay = 1000;
 
-    /*
-    handler.postDelayed(new Runnable() {
-        @Override
-        public void run() {
-            if(isRunning){
-                timerDisplayed.setText(String.valueOf(myTimerUp.getCounter()));
-                Log.d("run", "la");
-            }
-        }
-    },delay);
-    */
-
     //appel récursif
     runnableCode = new Runnable() {
       @Override
@@ -83,12 +70,18 @@ public class GameActivity extends AppCompatActivity {
         if (isRunning) {
           timerDisplayed.setText(String.valueOf(myTimerUp.getCounter()));
           handler.postDelayed(this, 1000);
-          Log.d("run", "la");
         }
       }
     };
 
     handler.postDelayed(runnableCode, 1000);
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    myTimerUp.reSet();
+    myTimerUp.interrupt();
   }
 }
 

@@ -40,6 +40,10 @@ public class TimerUp extends Service {
     return this.thread.get();
   }
 
+  public void reSet() {
+    this.thread.reSet();
+  }
+
   public class MyActivityBinder extends Binder {
     TimerUp getService() {
       return TimerUp.this;

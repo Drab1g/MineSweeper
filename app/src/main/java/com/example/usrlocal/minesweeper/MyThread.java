@@ -38,6 +38,10 @@ public class MyThread implements Runnable {
     this.isRunning = false;
   }
 
+  public void reSet() {
+    counter = 0;
+  }
+
   @Override
   public void run() {
     this.timer.schedule(new TimerTask() {
@@ -45,7 +49,6 @@ public class MyThread implements Runnable {
       public void run() {
         if (!isRunning) return;
         counter++;
-        Log.d("eeeeee", "eeeeeeeeee");
       }
     }, 0, interval);
   }

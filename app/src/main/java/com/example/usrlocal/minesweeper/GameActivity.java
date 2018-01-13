@@ -15,7 +15,7 @@ import android.widget.TextView;
 public class GameActivity extends AppCompatActivity {
 
   private Intent serviceIntent;
-  private TimerUp myTimerUp;
+  public TimerUp myTimerUp;
   private boolean isRunning = false;
   private TextView timerDisplayed;
   private Runnable runnableCode;
@@ -51,8 +51,7 @@ public class GameActivity extends AppCompatActivity {
     serviceIntent = new Intent(this, TimerUp.class);
     bindService(serviceIntent, myServiceConnection, Context.BIND_AUTO_CREATE);
 
-    startService(serviceIntent);
-    isRunning = true;
+
 
 
   }
@@ -60,6 +59,10 @@ public class GameActivity extends AppCompatActivity {
   @Override
   protected void onResume() {
     super.onResume();
+
+    startService(serviceIntent);
+    isRunning = true;
+
     final Handler handler = new Handler();
     final int delay = 1000;
 
@@ -80,7 +83,16 @@ public class GameActivity extends AppCompatActivity {
   @Override
   protected void onPause() {
     super.onPause();
+    //myTimerUp.reSet();
+    //myTimerUp.interrupt();
+    stopService(serviceIntent);
+  }
+
+  public void reSet(){
     myTimerUp.reSet();
+  }
+
+  public void interrupt(){
     myTimerUp.interrupt();
   }
 }

@@ -1,5 +1,6 @@
 package com.example.usrlocal.minesweeper;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.support.v4.content.res.TypedArrayUtils;
 import android.view.View;
@@ -18,15 +19,17 @@ public class FrontSquareAdapter extends BaseAdapter {
   GameBoard gameBoard;
   boolean[] flagBoard;
   int clearedSquares=0;
+  BoardFragment parentFrag;
 
-  public FrontSquareAdapter(Context context, GameBoard gameBoard) {
+  public FrontSquareAdapter(Context context, GameBoard gameBoard, BoardFragment frag) {
     this.context = context;
     this.gameBoard = gameBoard;
     this.flagBoard = new boolean[gameBoard.getSize()];
+    this.parentFrag = frag;
   }
 
   @Override
-  public View getView(final int position, View convertView, final ViewGroup parent) {
+  public View getView(final int position, final View convertView, final ViewGroup parent) {
     final Button button;
 
     // recycling
@@ -66,11 +69,13 @@ public class FrontSquareAdapter extends BaseAdapter {
               v.setVisibility(View.GONE);
             }
             Toast.makeText(context.getApplicationContext(), "Game over", Toast.LENGTH_LONG).show();
+            parentFrag.stopTimer();
             break;
 
           // explode empty area
           case 0:
             explodeEmptyArea(position,parent);
+            parentFrag.stopTimer();
             break;
 
           // reveal what is underneath  and check if game is completed
@@ -80,6 +85,7 @@ public class FrontSquareAdapter extends BaseAdapter {
             if (gameBoard.getSize() - gameBoard.getMine() == clearedSquares){
               //TODO
               //game completed, stop the timer and save the score
+              parentFrag.stopTimer();
             }
         }
       }

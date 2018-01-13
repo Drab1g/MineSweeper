@@ -1,5 +1,6 @@
 package com.example.usrlocal.minesweeper;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -27,8 +28,19 @@ public class BoardFragment extends Fragment {
 
     buttonGridView = (GridView) view.findViewById(R.id.buttonGridView);
     buttonGridView.setNumColumns(settings.getCols());
-    buttonGridView.setAdapter(new FrontSquareAdapter(this.getContext(), board));
+    buttonGridView.setAdapter(new FrontSquareAdapter(this.getContext(), board, this));
+
+
+
+
 
     return view;
   }
+
+  public void stopTimer(){
+    //getActivity().stopService(new Intent(getActivity().getApplicationContext(), TimerUp.class));
+    ((GameActivity)getActivity()).interrupt();
+  }
+
+
 }

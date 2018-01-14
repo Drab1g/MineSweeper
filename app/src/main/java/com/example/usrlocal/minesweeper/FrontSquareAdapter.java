@@ -20,13 +20,14 @@ public class FrontSquareAdapter extends BaseAdapter {
   Context context;
   GameBoard gameBoard;
   boolean[] flagBoard;
-  int clearedSquares=0;
+  boolean[] clearedSquares;
   BoardFragment parentFrag;
 
   public FrontSquareAdapter(Context context, GameBoard gameBoard, BoardFragment frag) {
     this.context = context;
     this.gameBoard = gameBoard;
     this.flagBoard = new boolean[gameBoard.getSize()];
+    this.clearedSquares = new boolean[gameBoard.getSize()];
     this.parentFrag = frag;
   }
 
@@ -79,18 +80,17 @@ public class FrontSquareAdapter extends BaseAdapter {
           // explode empty area
           case 0:
             explodeEmptyArea(position,parent);
-            //parentFrag.stopTimer();
+            if (gameBoard.getSize() - gameBoard.getMine() == getClearedSquaresNumber()){
+              parentFrag.stopTimer();
+              parentFrag.endOfTheGame(true);
+            }
             break;
 
           // reveal what is underneath  and check if game is completed
           default:
             view.setVisibility(View.GONE);
-            clearedSquares+=1;
-            Log.d(Integer.toString(clearedSquares),Integer.toString(gameBoard.getMine()));
-            Log.d(Integer.toString(gameBoard.getSize()),"sizeboard");
-            if (gameBoard.getSize() - gameBoard.getMine() == clearedSquares){
-              //TODO
-              //game completed, stop the timer and save the score
+            clearedSquares[position]=true;
+            if (gameBoard.getSize() - gameBoard.getMine() == getClearedSquaresNumber()){
               parentFrag.stopTimer();
               parentFrag.endOfTheGame(true);
             }
@@ -127,10 +127,19 @@ public class FrontSquareAdapter extends BaseAdapter {
     return position;
   }
 
+  public int getClearedSquaresNumber(){
+    int nb=0;
+    for (boolean b : clearedSquares){
+      if (b) nb++;
+    }
+    return nb;
+  }
+
+
   public int explodeEmptyArea(int clickedSquare, ViewGroup grid) {
 
-    List<Integer> emptySquaresArea = new ArrayList<Integer>(); // storing in this list all empty squares
-    //position that are within the same area as the cliquedSquare
+    List<Integer> emptySquaresArea = new ArrayList<Integer>(); // storing in this list all empty square
+    //positions that are within the same area as the cliquedSquare
 
     int currentEvaluation = 0;
     int currentPosition = clickedSquare;
@@ -138,6 +147,7 @@ public class FrontSquareAdapter extends BaseAdapter {
 
     emptySquaresArea.add(currentPosition);
     grid.getChildAt(currentPosition).setVisibility(View.GONE);
+    clearedSquares[currentPosition]=true;
 
     while (continuer || currentEvaluation < emptySquaresArea.size()) {
       continuer = false;
@@ -153,6 +163,7 @@ public class FrontSquareAdapter extends BaseAdapter {
       if (top) {
         int upPos = currentPosition - gameBoard.getCols();
         grid.getChildAt(upPos).setVisibility(View.GONE);
+        clearedSquares[upPos]=true;
         if (gameBoard.getMines(upPos) == 0 && !emptySquaresArea.contains(upPos)) {
           continuer = true;
           emptySquaresArea.add(upPos);
@@ -160,6 +171,7 @@ public class FrontSquareAdapter extends BaseAdapter {
         if (left) {
           int upleftPos = currentPosition - gameBoard.getCols() - 1;
           grid.getChildAt(upleftPos).setVisibility(View.GONE);
+          clearedSquares[upleftPos]=true;
           if (gameBoard.getMines(upleftPos) == 0 && !emptySquaresArea.contains(upleftPos)) {
             continuer = true;
             emptySquaresArea.add(upleftPos);
@@ -168,6 +180,7 @@ public class FrontSquareAdapter extends BaseAdapter {
         if (right) {
           int uprightPos = currentPosition - gameBoard.getCols() + 1;
           grid.getChildAt(uprightPos).setVisibility(View.GONE);
+          clearedSquares[uprightPos]=true;
           if (gameBoard.getMines(uprightPos) == 0 && !emptySquaresArea.contains(uprightPos)) {
             continuer = true;
             emptySquaresArea.add(uprightPos);
@@ -177,6 +190,7 @@ public class FrontSquareAdapter extends BaseAdapter {
       if (bottom) {
         int downPos = currentPosition + gameBoard.getCols();
         grid.getChildAt(downPos).setVisibility(View.GONE);
+        clearedSquares[downPos]=true;
         if (gameBoard.getMines(downPos) == 0 && !emptySquaresArea.contains(downPos)) {
           continuer = true;
           emptySquaresArea.add(downPos);
@@ -184,6 +198,7 @@ public class FrontSquareAdapter extends BaseAdapter {
         if (left) {
           int downleftPos = currentPosition + gameBoard.getCols() - 1;
           grid.getChildAt(downleftPos).setVisibility(View.GONE);
+          clearedSquares[downleftPos]=true;
           if (gameBoard.getMines(downleftPos) == 0 && !emptySquaresArea.contains(downleftPos)) {
             continuer = true;
             emptySquaresArea.add(downleftPos);
@@ -192,6 +207,7 @@ public class FrontSquareAdapter extends BaseAdapter {
         if (right) {
           int downrightPos = currentPosition + gameBoard.getCols() + 1;
           grid.getChildAt(downrightPos).setVisibility(View.GONE);
+          clearedSquares[downrightPos]=true;
           if (gameBoard.getMines(downrightPos) == 0 && !emptySquaresArea.contains(downrightPos)) {
             continuer = true;
             emptySquaresArea.add(downrightPos);
@@ -201,15 +217,16 @@ public class FrontSquareAdapter extends BaseAdapter {
       if (left) {
         int leftPos = currentPosition - 1;
         grid.getChildAt(leftPos).setVisibility(View.GONE);
+        clearedSquares[leftPos]=true;
         if (gameBoard.getMines(leftPos) == 0 && !emptySquaresArea.contains(leftPos)) {
           continuer = true;
           emptySquaresArea.add(leftPos);
         }
       }
-
       if (right) {
         int rightPos = currentPosition + 1;
         grid.getChildAt(rightPos).setVisibility(View.GONE);
+        clearedSquares[rightPos]=true;
         if (gameBoard.getMines(rightPos) == 0 && !emptySquaresArea.contains(rightPos)) {
           continuer = true;
           emptySquaresArea.add(rightPos);

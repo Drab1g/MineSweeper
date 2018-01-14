@@ -112,15 +112,13 @@ public class GameActivity extends AppCompatActivity {
     SharedPreferences.Editor editor = prefs.edit();
     if(victory){
       editor.putBoolean("HighScore_LV1_Victory",victory);
-      if(prefs.getBoolean("HighScore_LV1_Victory",true) && Integer.parseInt(prefs.getString("HighScore_LV1_Time",null))>myTimerUp.getCounter()){
+      if(prefs.getBoolean("HighScore_LV1_Victory",true) && prefs.getInt("HighScore_LV1_Time",10000) > myTimerUp.getCounter()){
         editor.putString("HighScore_LV1_Time",Integer.toString(myTimerUp.getCounter()));
       }else if(prefs.getBoolean("HighScore_LV1_Victory",false)){
         editor.putString("HighScore_LV1_Time",Integer.toString(myTimerUp.getCounter()));
       }
     }
-
     editor.commit();
   }
-
 }
 

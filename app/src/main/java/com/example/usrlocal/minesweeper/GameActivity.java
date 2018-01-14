@@ -110,9 +110,15 @@ public class GameActivity extends AppCompatActivity {
   public void saveHighestScoreGame(boolean victory){
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
     SharedPreferences.Editor editor = prefs.edit();
-    if()
-    editor.putBoolean("HighScore_LV1_Victory",victory);
-    editor.putString("HighScore_LV1_Time",Integer.toString(myTimerUp.getCounter()));
+    if(victory){
+      editor.putBoolean("HighScore_LV1_Victory",victory);
+      if(prefs.getBoolean("HighScore_LV1_Victory",true) && Integer.parseInt(prefs.getString("HighScore_LV1_Time",null))>myTimerUp.getCounter()){
+        editor.putString("HighScore_LV1_Time",Integer.toString(myTimerUp.getCounter()));
+      }else if(prefs.getBoolean("HighScore_LV1_Victory",false)){
+        editor.putString("HighScore_LV1_Time",Integer.toString(myTimerUp.getCounter()));
+      }
+    }
+
     editor.commit();
   }
 

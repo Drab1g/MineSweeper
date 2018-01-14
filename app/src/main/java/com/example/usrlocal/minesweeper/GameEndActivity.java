@@ -27,11 +27,13 @@ public class GameEndActivity extends AppCompatActivity {
   @Override
   protected void onResume() {
     super.onResume();
+
     if(getIntent().getBooleanExtra("victory",true)){
       myScore.setText("Victoire en "+ getIntent().getStringExtra("time") + "s");
     }else{
       myScore.setText("Defaite en " + getIntent().getStringExtra("time") + "s");
     }
+
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
     String VicOrDef = "";
     if(prefs.getBoolean("HighScore_LV1_Victory",true)){

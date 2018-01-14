@@ -73,7 +73,6 @@ public class FrontSquareAdapter extends BaseAdapter {
             parentFrag.stopTimer();
 
             parentFrag.endOfTheGame(false);
-
             break;
 
           // explode empty area
@@ -89,7 +88,8 @@ public class FrontSquareAdapter extends BaseAdapter {
             if (gameBoard.getSize() - gameBoard.getMine() == clearedSquares){
               //TODO
               //game completed, stop the timer and save the score
-              //parentFrag.stopTimer();
+              parentFrag.stopTimer();
+              parentFrag.endOfTheGame(false);
             }
         }
       }

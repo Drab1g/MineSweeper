@@ -1,5 +1,6 @@
 package com.example.usrlocal.minesweeper;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -21,14 +22,14 @@ public class FrontSquareAdapter extends BaseAdapter {
   GameBoard gameBoard;
   boolean[] flagBoard;
   boolean[] clearedSquares;
-  BoardFragment parentFrag;
+  GameActivity parentActivity;
 
-  public FrontSquareAdapter(Context context, GameBoard gameBoard, BoardFragment frag) {
+  public FrontSquareAdapter(Context context, GameBoard gameBoard, GameActivity parentActivity) {
     this.context = context;
     this.gameBoard = gameBoard;
     this.flagBoard = new boolean[gameBoard.getSize()];
     this.clearedSquares = new boolean[gameBoard.getSize()];
-    this.parentFrag = frag;
+    this.parentActivity=parentActivity;
   }
 
   @Override
@@ -72,17 +73,17 @@ public class FrontSquareAdapter extends BaseAdapter {
               v.setVisibility(View.GONE);
             }
             Toast.makeText(context.getApplicationContext(), "Game over", Toast.LENGTH_LONG).show();
-            parentFrag.stopTimer();
+            parentActivity.interrupt();
 
-            parentFrag.endOfTheGame(false);
+            parentActivity.endTheGame(false);
             break;
 
           // explode empty area
           case 0:
             explodeEmptyArea(position,parent);
             if (gameBoard.getSize() - gameBoard.getMine() == getClearedSquaresNumber()){
-              parentFrag.stopTimer();
-              parentFrag.endOfTheGame(true);
+              parentActivity.interrupt();
+              parentActivity.endTheGame(true);
             }
             break;
 
@@ -91,8 +92,8 @@ public class FrontSquareAdapter extends BaseAdapter {
             view.setVisibility(View.GONE);
             clearedSquares[position]=true;
             if (gameBoard.getSize() - gameBoard.getMine() == getClearedSquaresNumber()){
-              parentFrag.stopTimer();
-              parentFrag.endOfTheGame(true);
+              parentActivity.interrupt();
+              parentActivity.endTheGame(true);
             }
         }
       }

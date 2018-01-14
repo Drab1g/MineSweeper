@@ -12,14 +12,18 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.GridView;
 import android.widget.TextView;
 
 public class GameActivity extends AppCompatActivity {
 
+  private TextView timerDisplayed;
+  GridView mineGridView;
+  GridView buttonGridView;
+
   private Intent serviceIntent;
   public TimerUp myTimerUp;
   private boolean isRunning = false;
-  private TextView timerDisplayed;
   private Runnable runnableCode;
   private ServiceConnection myServiceConnection = new ServiceConnection() {
 
@@ -39,23 +43,22 @@ public class GameActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.game_view);
 
-    Bundle args = new Bundle();
-    args.putString("level", getIntent().getStringExtra("level"));
+    String level = getIntent().getStringExtra("level");
+    GameSettings settings = GameSettings.valueOf(level);
+    GameBoard board = new GameBoard(settings);
 
-    BoardFragment frag = new BoardFragment();
-    frag.setArguments(args);
+    mineGridView = (GridView) findViewById(R.id.mineGridView);
+    mineGridView.setNumColumns(settings.getCols());
+    mineGridView.setAdapter(new BackSquareAdapter(this, board));
 
-    FragmentManager fm = getSupportFragmentManager();
-    fm.beginTransaction().add(R.id.board_fragment, frag).commit();
+    buttonGridView = (GridView) findViewById(R.id.buttonGridView);
+    buttonGridView.setNumColumns(settings.getCols());
+    buttonGridView.setAdapter(new FrontSquareAdapter(this, board, this));
 
     timerDisplayed = (TextView) findViewById(R.id.timer);
 
     serviceIntent = new Intent(this, TimerUp.class);
     bindService(serviceIntent, myServiceConnection, Context.BIND_AUTO_CREATE);
-
-
-
-
   }
 
   @Override
@@ -112,7 +115,7 @@ public class GameActivity extends AppCompatActivity {
     SharedPreferences.Editor editor = prefs.edit();
     if(victory){
       editor.putBoolean("HighScore_LV1_Victory",victory);
-      if(prefs.getBoolean("HighScore_LV1_Victory",true) && prefs.getInt("HighScore_LV1_Time",10000) > myTimerUp.getCounter()){
+      if(prefs.getBoolean("HighScore_LV1_Victory",true) && Integer.valueOf(prefs.getString("HighScore_LV1_Time","10000")) > myTimerUp.getCounter()){
         editor.putString("HighScore_LV1_Time",Integer.toString(myTimerUp.getCounter()));
       }else if(prefs.getBoolean("HighScore_LV1_Victory",false)){
         editor.putString("HighScore_LV1_Time",Integer.toString(myTimerUp.getCounter()));

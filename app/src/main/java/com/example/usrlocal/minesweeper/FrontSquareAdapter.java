@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.res.TypedArrayUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -84,12 +85,14 @@ public class FrontSquareAdapter extends BaseAdapter {
           // reveal what is underneath  and check if game is completed
           default:
             view.setVisibility(View.GONE);
-            clearedSquares-=1;
+            clearedSquares+=1;
+            Log.d(Integer.toString(clearedSquares),Integer.toString(gameBoard.getMine()));
+            Log.d(Integer.toString(gameBoard.getSize()),"sizeboard");
             if (gameBoard.getSize() - gameBoard.getMine() == clearedSquares){
               //TODO
               //game completed, stop the timer and save the score
               parentFrag.stopTimer();
-              parentFrag.endOfTheGame(false);
+              parentFrag.endOfTheGame(true);
             }
         }
       }

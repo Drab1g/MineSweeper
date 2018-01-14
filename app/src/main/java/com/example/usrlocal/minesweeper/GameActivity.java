@@ -4,9 +4,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -95,5 +97,24 @@ public class GameActivity extends AppCompatActivity {
   public void interrupt(){
     myTimerUp.interrupt();
   }
+
+  public void endTheGame(boolean victory){
+    Intent gameEndActivity = new Intent(GameActivity.this, GameEndActivity.class);
+    gameEndActivity.putExtra("level", getIntent().getStringExtra("level"));
+    gameEndActivity.putExtra("victory", victory);
+    gameEndActivity.putExtra("time", Integer.toString(myTimerUp.getCounter()));
+    saveHighestScoreGame(victory);
+    startActivity(gameEndActivity);
+  }
+
+  public void saveHighestScoreGame(boolean victory){
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+    SharedPreferences.Editor editor = prefs.edit();
+    if()
+    editor.putBoolean("HighScore_LV1_Victory",victory);
+    editor.putString("HighScore_LV1_Time",Integer.toString(myTimerUp.getCounter()));
+    editor.commit();
+  }
+
 }
 

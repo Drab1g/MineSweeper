@@ -2,6 +2,7 @@ package com.example.usrlocal.minesweeper;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.res.TypedArrayUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,12 +71,15 @@ public class FrontSquareAdapter extends BaseAdapter {
             }
             Toast.makeText(context.getApplicationContext(), "Game over", Toast.LENGTH_LONG).show();
             parentFrag.stopTimer();
+
+            parentFrag.endOfTheGame(false);
+
             break;
 
           // explode empty area
           case 0:
             explodeEmptyArea(position,parent);
-            parentFrag.stopTimer();
+            //parentFrag.stopTimer();
             break;
 
           // reveal what is underneath  and check if game is completed
@@ -85,7 +89,7 @@ public class FrontSquareAdapter extends BaseAdapter {
             if (gameBoard.getSize() - gameBoard.getMine() == clearedSquares){
               //TODO
               //game completed, stop the timer and save the score
-              parentFrag.stopTimer();
+              //parentFrag.stopTimer();
             }
         }
       }

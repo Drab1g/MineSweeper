@@ -4,4 +4,6 @@
     <string name="easy_button_text">Facile</string>
     <string name="medium_button_text">Moyen</string>
     <string name="hard_button_text">Difficile</string>
+    <string name="list_scores">Top 10 des scores</string>
+    <string name="tryAgain">Try Again</string>
 </resources>

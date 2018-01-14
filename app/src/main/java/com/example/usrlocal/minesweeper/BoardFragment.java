@@ -42,5 +42,9 @@ public class BoardFragment extends Fragment {
     ((GameActivity)getActivity()).interrupt();
   }
 
+  public void endOfTheGame(boolean victory){
+    ((GameActivity)getActivity()).endTheGame(victory);
+  }
+
 
 }

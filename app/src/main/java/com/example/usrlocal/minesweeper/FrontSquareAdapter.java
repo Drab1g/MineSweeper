@@ -60,6 +60,7 @@ public class FrontSquareAdapter extends BaseAdapter {
         if(flagBoard[position]){
           view.setBackground(context.getDrawable(R.drawable.empty_button));
           flagBoard[position]=false;
+          parentActivity.incrDecrCounter(true);
           return;
         }
 
@@ -105,6 +106,7 @@ public class FrontSquareAdapter extends BaseAdapter {
       public boolean onLongClick(View view) {
         view.setBackground(context.getDrawable(R.drawable.flag_button));
         flagBoard[position]=true;
+        parentActivity.incrDecrCounter(false);
         return true;
       }
 

@@ -15,6 +15,8 @@ public class GameEndActivity extends AppCompatActivity {
 
   private TextView myScore;
   private TextView bestScoreValue;
+  private Button tryAgain;
+  int currentLevel;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -22,13 +24,15 @@ public class GameEndActivity extends AppCompatActivity {
     setContentView(R.layout.game_end);
     myScore = (TextView) findViewById(R.id.myScore);
     bestScoreValue = (TextView) findViewById(R.id.bestScoreValue);
+    tryAgain = (Button) findViewById(R.id.tryAgain);
   }
 
   @Override
   protected void onResume() {
     super.onResume();
 
-    if(getIntent().getBooleanExtra("victory",true)){
+    currentLevel = getIntent().getIntExtra("level",1);
+    if(getIntent().getBooleanExtra("victory",false)){
       myScore.setText("Victoire en "+ getIntent().getStringExtra("time") + "s");
     }else{
       myScore.setText("Defaite en " + getIntent().getStringExtra("time") + "s");
@@ -36,12 +40,22 @@ public class GameEndActivity extends AppCompatActivity {
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
     String VicOrDef = "";
-    if(prefs.getBoolean("HighScore_LV1_Victory",true)){
+    if(prefs.getString("HighScore_LV"+currentLevel+"_Time",null)!=null){
       VicOrDef = "Victoire en ";
+      bestScoreValue.setText(VicOrDef + prefs.getString("HighScore_LV"+currentLevel+"_Time",null) + "s");
     }else{
-      VicOrDef = "Defaite en ";
+      VicOrDef = "Defaite";
+      bestScoreValue.setText(VicOrDef);
     }
 
-    bestScoreValue.setText(VicOrDef + prefs.getString("HighScore_LV1_Time",null) + "s");
+
+
+    tryAgain.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        Intent intent = new Intent(GameEndActivity.this, MenuActivity.class);
+        startActivity(intent);
+      }
+    });
   }
 }

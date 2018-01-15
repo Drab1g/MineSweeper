@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MineSweeper.iml" filepath="$PROJECT_DIR$/MineSweeper.iml" />
+      <module fileurl="file://D:\clone_mineSweeper\MineSweeper\MineSweeper.iml" filepath="D:\clone_mineSweeper\MineSweeper\MineSweeper.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:\clone_mineSweeper\MineSweeper\app\app.iml" filepath="D:\clone_mineSweeper\MineSweeper\app\app.iml" />
     </modules>
   </component>
 </project>

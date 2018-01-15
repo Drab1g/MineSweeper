@@ -3,8 +3,8 @@ package com.example.usrlocal.minesweeper;
 public enum GameSettings {
 
   EASY(9, 9, 10),
-  MEDIUM(12, 16, 40),
-  HARD(16, 22, 80);
+  MEDIUM(12, 16, 20),
+  HARD(16, 22, 30);
 
   private int cols, rows, mines;
 

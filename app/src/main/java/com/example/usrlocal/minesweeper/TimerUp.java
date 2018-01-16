@@ -44,6 +44,14 @@ public class TimerUp extends Service {
     this.thread.reSet();
   }
 
+  public void reSet(int value) {
+    this.thread.reSet(value);
+  }
+
+  public void againstTheClock(boolean value) {
+    this.thread.againstTheClock(value);
+  }
+
   public class MyActivityBinder extends Binder {
     TimerUp getService() {
       return TimerUp.this;

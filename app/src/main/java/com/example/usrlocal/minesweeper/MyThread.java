@@ -16,6 +16,7 @@ public class MyThread implements Runnable {
   private Timer timer;
   private boolean isRunning = false;
   private boolean first = true;
+  private boolean mode = false;//false->classic incrementation true->decrementation/against the clock
 
   MyThread() {
     this.timer = new Timer();
@@ -24,6 +25,10 @@ public class MyThread implements Runnable {
 
   public int get() {
     return this.counter;
+  }
+
+  public void againstTheClock(boolean value) {
+    mode = value;
   }
 
   public void start() {
@@ -42,13 +47,18 @@ public class MyThread implements Runnable {
     counter = 0;
   }
 
+  public void reSet(int value) {
+    counter = value;
+  }
+
   @Override
   public void run() {
     this.timer.schedule(new TimerTask() {
       @Override
       public void run() {
         if (!isRunning) return;
-        counter++;
+        if(!mode) counter++;
+        else if(counter>0) counter--;
       }
     }, 0, interval);
   }

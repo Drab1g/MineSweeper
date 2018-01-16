@@ -35,14 +35,17 @@ public class GameActivity extends AppCompatActivity {
   public TimerUp myTimerUp;
   private boolean isRunning = false;
   private int mineNumber;
-  int myLevel;
+  private int myLevel;
+  private boolean mode;
   private static final String FILE = "Score.txt";
+  GameSettings settings;
   private Runnable runnableCode;
   private ServiceConnection myServiceConnection = new ServiceConnection() {
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder iBinder) {
       myTimerUp = ((TimerUp.MyActivityBinder) iBinder).getService();
+      againstTheClock(mode);
     }
 
     @Override
@@ -56,6 +59,7 @@ public class GameActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.game_view);
 
+    mode = getIntent().getBooleanExtra("mode", false);
     String level = getIntent().getStringExtra("level");
     myLevel=0;
     switch (level){
@@ -69,7 +73,7 @@ public class GameActivity extends AppCompatActivity {
         myLevel = 3;
         break;
     }
-    GameSettings settings = GameSettings.valueOf(level);
+    settings = GameSettings.valueOf(level);
     mineNumber=settings.getMines();
     GameBoard board = new GameBoard(settings);
 
@@ -89,12 +93,13 @@ public class GameActivity extends AppCompatActivity {
 
     serviceIntent = new Intent(this, TimerUp.class);
     bindService(serviceIntent, myServiceConnection, Context.BIND_AUTO_CREATE);
+
+
   }
 
   @Override
   protected void onResume() {
     super.onResume();
-
     startService(serviceIntent);
     isRunning = true;
 
@@ -106,7 +111,17 @@ public class GameActivity extends AppCompatActivity {
       @Override
       public void run() {
         if (isRunning) {
-          timerDisplayed.setText(String.valueOf(myTimerUp.getCounter()));
+          int coounter = myTimerUp.getCounter();
+          timerDisplayed.setText(String.valueOf(coounter));
+          if(coounter==0 && mode){
+            Intent gameEndActivity = new Intent(GameActivity.this, GameEndActivity.class);
+            gameEndActivity.putExtra("level", myLevel);
+            gameEndActivity.putExtra("victory", false);
+            gameEndActivity.putExtra("time", Integer.toString(myTimerUp.getCounter()));
+            isRunning = false;
+            startActivity(gameEndActivity);
+
+          }
           handler.postDelayed(this, 1000);
         }
       }
@@ -129,11 +144,21 @@ public class GameActivity extends AppCompatActivity {
     myTimerUp.reSet();
   }
 
+  public void reSet(int value){
+    myTimerUp.reSet(value);
+  }
+
   public void interrupt(){
     myTimerUp.interrupt();
   }
 
+  public void againstTheClock(boolean value) {
+    myTimerUp.againstTheClock(value);
+    if(mode) reSet(settings.getTime());
+  }
+
   public void endTheGame(boolean victory){
+    isRunning = false;
     Intent gameEndActivity = new Intent(GameActivity.this, GameEndActivity.class);
     gameEndActivity.putExtra("level", myLevel);
     gameEndActivity.putExtra("victory", victory);

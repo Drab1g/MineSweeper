@@ -25,6 +25,8 @@ public class GameEndActivity extends AppCompatActivity {
   private Button tryAgain;
   private Button register;
   private Button BestScores;
+
+  boolean  victory=false;
   int currentLevel;
   String currentTime;
   private EditText editText;
@@ -48,10 +50,13 @@ public class GameEndActivity extends AppCompatActivity {
 
     currentLevel = getIntent().getIntExtra("level",1);
     currentTime = getIntent().getStringExtra("time");
-    if(getIntent().getBooleanExtra("victory",false)){
+    victory = getIntent().getBooleanExtra("victory",false);
+    if(victory){
       myScore.setText("Victoire en "+ getIntent().getStringExtra("time") + "s");
     }else{
       myScore.setText("Defaite en " + getIntent().getStringExtra("time") + "s");
+      editText.setVisibility(View.GONE);
+      register.setVisibility(View.GONE);
     }
 
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());

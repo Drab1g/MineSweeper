@@ -7,6 +7,16 @@
     android:orientation="vertical"
     tools:context="com.example.usrlocal.minesweeper.MenuActivity">
 
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Contre la montre? (à activer ci-dessous)"/>
+
+    <Switch
+      android:id="@+id/mode"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content" />
+
     <Button
         android:id="@+id/easy_button"
         android:layout_width="wrap_content"

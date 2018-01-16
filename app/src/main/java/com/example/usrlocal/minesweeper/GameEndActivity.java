@@ -10,8 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,7 +22,7 @@ public class GameEndActivity extends AppCompatActivity {
   private TextView bestScoreValue;
   private Button tryAgain;
   private Button register;
-  private Button BestScores;
+  private Button bestScores;
 
   boolean  victory=false;
   int currentLevel;
@@ -40,7 +38,7 @@ public class GameEndActivity extends AppCompatActivity {
     bestScoreValue = (TextView) findViewById(R.id.bestScoreValue);
     tryAgain = (Button) findViewById(R.id.tryAgain);
     register = (Button) findViewById(R.id.register);
-    BestScores = (Button) findViewById(R.id.BestScores);
+    bestScores = (Button) findViewById(R.id.BestScores);
     editText = (EditText) findViewById(R.id.pseudoRegister);
   }
 
@@ -86,7 +84,13 @@ public class GameEndActivity extends AppCompatActivity {
       }
     });
 
-
+    bestScores.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        Intent intent = new Intent(GameEndActivity.this, ScoresActivity.class);
+        startActivity(intent);
+      }
+    });
 
   }
 
@@ -126,14 +130,14 @@ public class GameEndActivity extends AppCompatActivity {
     String scoresByLvl[] = output.split(";");
     String currentLvlScores = scoresByLvl[currentLevel-1];
     if(currentLvlScores.equals(" ")){
-      if(editText.getText().toString().equals("")) currentLvlScores+="noName ";
-      else currentLvlScores+=editText.getText() + " ";
       currentLvlScores += currentTime;
+      if(editText.getText().toString().equals("")) currentLvlScores+="s noName";
+      else currentLvlScores+= "s " + editText.getText();
     }else{
       currentLvlScores+=",";
-      if(editText.getText().toString().equals("")) currentLvlScores+="noName ";
-      else currentLvlScores+=editText.getText() + " ";
       currentLvlScores+=currentTime;
+      if(editText.getText().toString().equals("")) currentLvlScores+="s noName";
+      else currentLvlScores+= "s " + editText.getText();
     }
     scoresByLvl[currentLevel-1] = currentLvlScores;
     output = scoresByLvl[0] + ";" + scoresByLvl[1]  + ";" +  scoresByLvl[2];
@@ -157,10 +161,6 @@ public class GameEndActivity extends AppCompatActivity {
     String output="";
     try{
       fis = openFileInput(FILE);
-      /*byte[] buffer = new byte[1024];
-      while(fis.read(buffer)!=-1){
-        output = new String(buffer);
-      }*/
 
       int c;
       String temp="";
@@ -170,7 +170,6 @@ public class GameEndActivity extends AppCompatActivity {
       output = temp;
 
       fis.close();
-      Toast.makeText(this,output,Toast.LENGTH_LONG).show();
     }catch (FileNotFoundException e){
       e.printStackTrace();
     }catch (IOException e){

@@ -17,7 +17,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 
 public class GameEndActivity extends AppCompatActivity {
 
@@ -29,7 +28,7 @@ public class GameEndActivity extends AppCompatActivity {
   int currentLevel;
   String currentTime;
   private EditText editText;
-  private static final String FILE = "Score.txt";
+  public static final String FILE = "Score.txt";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +76,8 @@ public class GameEndActivity extends AppCompatActivity {
       @Override
       public void onClick(View view) {
         saveScoreInFile();
+        Intent intent = new Intent(GameEndActivity.this, ScoresActivity.class);
+        startActivity(intent);
       }
     });
 
@@ -103,10 +104,6 @@ public class GameEndActivity extends AppCompatActivity {
     String output="";
     try{
       fis = openFileInput(FILE);
-      /*byte[] buffer = new byte[1024];
-      while(fis.read(buffer)!=-1){
-        output = new String(buffer);
-      }*/
 
       int c;
       String temp="";

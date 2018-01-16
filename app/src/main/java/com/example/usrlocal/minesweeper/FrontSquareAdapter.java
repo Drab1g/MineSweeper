@@ -73,9 +73,7 @@ public class FrontSquareAdapter extends BaseAdapter {
             for (View v : parent.getTouchables()) {
               v.setVisibility(View.GONE);
             }
-            Toast.makeText(context.getApplicationContext(), "Game over", Toast.LENGTH_LONG).show();
             parentActivity.interrupt();
-
             parentActivity.endTheGame(false);
             break;
 

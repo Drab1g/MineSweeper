@@ -23,17 +23,18 @@ public class GameEndActivity extends AppCompatActivity {
   private Button tryAgain;
   private Button register;
   private Button bestScores;
+  private EditText editText;
 
   boolean  victory=false;
   int currentLevel;
   String currentTime;
-  private EditText editText;
+
   public static final String FILE = "Score.txt";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.game_end);
+    setContentView(R.layout.activity_end);
     myScore = (TextView) findViewById(R.id.myScore);
     bestScoreValue = (TextView) findViewById(R.id.bestScoreValue);
     tryAgain = (Button) findViewById(R.id.tryAgain);
@@ -50,9 +51,9 @@ public class GameEndActivity extends AppCompatActivity {
     currentTime = getIntent().getStringExtra("time");
     victory = getIntent().getBooleanExtra("victory",false);
     if(victory){
-      myScore.setText("Victoire en "+ getIntent().getStringExtra("time") + "s");
+      myScore.setText("Victoire en "+ currentTime + "s");
     }else{
-      myScore.setText("Defaite en " + getIntent().getStringExtra("time") + "s");
+      myScore.setText("Defaite en " + currentTime + "s");
       editText.setVisibility(View.GONE);
       register.setVisibility(View.GONE);
     }
@@ -113,20 +114,19 @@ public class GameEndActivity extends AppCompatActivity {
     String output="";
     try{
       fis = openFileInput(FILE);
-
       int c;
       String temp="";
       while( (c = fis.read()) != -1){
         temp = temp + Character.toString((char)c);
       }
       output = temp;
-
       fis.close();
     }catch (FileNotFoundException e){
       e.printStackTrace();
     }catch (IOException e){
       e.printStackTrace();
     }
+
     String scoresByLvl[] = output.split(";");
     String currentLvlScores = scoresByLvl[currentLevel-1];
     if(currentLvlScores.equals(" ")){
@@ -146,30 +146,6 @@ public class GameEndActivity extends AppCompatActivity {
       fos = openFileOutput(FILE,Context.MODE_PRIVATE);
       fos.write(output.getBytes());
       fos.close();
-    }catch (FileNotFoundException e){
-      e.printStackTrace();
-    }catch (IOException e){
-      e.printStackTrace();
-    }
-
-    readFileToast();
-
-  }
-
-  public void readFileToast(){
-    FileInputStream fis;
-    String output="";
-    try{
-      fis = openFileInput(FILE);
-
-      int c;
-      String temp="";
-      while( (c = fis.read()) != -1){
-        temp = temp + Character.toString((char)c);
-      }
-      output = temp;
-
-      fis.close();
     }catch (FileNotFoundException e){
       e.printStackTrace();
     }catch (IOException e){

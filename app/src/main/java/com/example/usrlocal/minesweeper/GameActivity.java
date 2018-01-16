@@ -17,18 +17,20 @@ public class GameActivity extends AppCompatActivity {
 
   private TextView timerDisplayed;
   private TextView mineCounter;
+
   private GridView mineGridView;
   private GridView buttonGridView;
 
-  private Intent serviceIntent;
+  private GameSettings settings;
   public TimerUp myTimerUp;
+  private Runnable runnableCode;
+  private Intent serviceIntent;
+
   private boolean isRunning = false;
+  private boolean mode;
   private int mineNumber;
   private int myLevel;
-  private boolean mode;
-  private static final String FILE = "Score.txt";
-  GameSettings settings;
-  private Runnable runnableCode;
+
   private ServiceConnection myServiceConnection = new ServiceConnection() {
 
     @Override
@@ -46,7 +48,7 @@ public class GameActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.game_view);
+    setContentView(R.layout.activity_game);
 
     mode = getIntent().getBooleanExtra("mode", false);
     String level = getIntent().getStringExtra("level");
@@ -77,13 +79,10 @@ public class GameActivity extends AppCompatActivity {
     timerDisplayed = (TextView) findViewById(R.id.timer);
     mineCounter = (TextView)findViewById(R.id.mineCount);
 
-
     mineCounter.setText(Integer.toString(mineNumber));
 
     serviceIntent = new Intent(this, TimerUp.class);
     bindService(serviceIntent, myServiceConnection, Context.BIND_AUTO_CREATE);
-
-
   }
 
   @Override
@@ -115,17 +114,40 @@ public class GameActivity extends AppCompatActivity {
         }
       }
     };
-
     handler.postDelayed(runnableCode, 1000);
+  }
 
+  public void endTheGame(boolean victory){
+    isRunning = false;
+    Intent gameEndActivity = new Intent(GameActivity.this, GameEndActivity.class);
+    gameEndActivity.putExtra("level", myLevel);
+    gameEndActivity.putExtra("victory", victory);
+    gameEndActivity.putExtra("time", Integer.toString(myTimerUp.getCounter()));
+    saveHighestScoreGame(victory);
+    startActivity(gameEndActivity);
+  }
 
+  public void saveHighestScoreGame(boolean victory){
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+    SharedPreferences.Editor editor = prefs.edit();
+    if(victory){
+      if(Integer.valueOf(prefs.getString("HighScore_LV"+ myLevel +"_Time","10000")) > myTimerUp.getCounter()){
+        editor.putString("HighScore_LV"+ myLevel +"_Time",Integer.toString(myTimerUp.getCounter()));
+        editor.commit();
+      }
+    }
+  }
+
+  public void incrDecrCounter(boolean value){
+    if (value)mineNumber++;
+    else mineNumber--;
+    mineCounter.setText(Integer.toString(mineNumber));
   }
 
   @Override
   protected void onPause() {
     super.onPause();
-    myTimerUp.reSet();
-    //myTimerUp.interrupt();
+    reSet();
     stopService(serviceIntent);
   }
 
@@ -146,39 +168,4 @@ public class GameActivity extends AppCompatActivity {
     if(mode) reSet(settings.getTime());
   }
 
-  public void endTheGame(boolean victory){
-    isRunning = false;
-    Intent gameEndActivity = new Intent(GameActivity.this, GameEndActivity.class);
-    gameEndActivity.putExtra("level", myLevel);
-    gameEndActivity.putExtra("victory", victory);
-    gameEndActivity.putExtra("time", Integer.toString(myTimerUp.getCounter()));
-    saveHighestScoreGame(victory);
-    startActivity(gameEndActivity);
-  }
-
-  public void incrDecrCounter(boolean value){
-    if (value){
-      mineNumber++;
-    }
-    else{
-      mineNumber--;
-    }
-    mineCounter.setText(Integer.toString(mineNumber));
-  }
-
-  public void saveHighestScoreGame(boolean victory){
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-    SharedPreferences.Editor editor = prefs.edit();
-
-    if(victory){
-
-      //editor.putBoolean("HighScore_LV1_Victory",victory);
-      if(Integer.valueOf(prefs.getString("HighScore_LV"+ myLevel +"_Time","10000")) > myTimerUp.getCounter()){
-        //Log.d("valeur enregistree",prefs.getString("HighScore_LV1_Time","10000"));
-        editor.putString("HighScore_LV"+ myLevel +"_Time",Integer.toString(myTimerUp.getCounter()));
-        editor.commit();
-      }
-    }
-
-  }
 }

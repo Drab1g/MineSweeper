@@ -23,20 +23,32 @@ public class MyThread implements Runnable {
     this.thread = new Thread(this);
   }
 
-  public int get() {
-    return this.counter;
-  }
-
-  public void againstTheClock(boolean value) {
-    mode = value;
-  }
-
   public void start() {
     isRunning = true;
     if (this.first) {
       this.thread.run();
       this.first = false;
     }
+  }
+
+  @Override
+  public void run() {
+    this.timer.schedule(new TimerTask() {
+      @Override
+      public void run() {
+        if (!isRunning) return;
+        if(!mode) counter++;
+        else if(counter>0) counter--;
+      }
+    }, 0, interval);
+  }
+
+  public int get() {
+    return this.counter;
+  }
+
+  public void againstTheClock(boolean value) {
+    mode = value;
   }
 
   public void interrupt() {
@@ -51,15 +63,5 @@ public class MyThread implements Runnable {
     counter = value;
   }
 
-  @Override
-  public void run() {
-    this.timer.schedule(new TimerTask() {
-      @Override
-      public void run() {
-        if (!isRunning) return;
-        if(!mode) counter++;
-        else if(counter>0) counter--;
-      }
-    }, 0, interval);
-  }
+
 }

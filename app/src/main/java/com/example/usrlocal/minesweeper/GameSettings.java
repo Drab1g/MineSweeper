@@ -2,9 +2,9 @@ package com.example.usrlocal.minesweeper;
 
 public enum GameSettings {
 
-  EASY(9, 9, 2 ,3),
-  MEDIUM(12, 16, 2 , 100),
-  HARD(16, 22, 2 , 200);
+  EASY(9, 9, 10, 50),
+  MEDIUM(12, 16, 30, 100),
+  HARD(16, 22, 60, 200);
 
   private int cols;
   private int rows;

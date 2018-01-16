@@ -25,7 +25,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.menu_view);
+    setContentView(R.layout.activity_menu);
 
     easyButton = (Button) findViewById(R.id.easy_button);
     mediumButton = (Button) findViewById(R.id.medium_button);

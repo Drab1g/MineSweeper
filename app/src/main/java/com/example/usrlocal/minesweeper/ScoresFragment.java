@@ -27,6 +27,7 @@ public class ScoresFragment extends Fragment {
 
   public ScoresFragment() {
   }
+
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
@@ -54,14 +55,12 @@ public class ScoresFragment extends Fragment {
     String output="";
     try{
       fis = ((ScoresActivity)getActivity()).getApplicationContext().openFileInput(GameEndActivity.FILE);
-
       int c;
       String temp="";
       while( (c = fis.read()) != -1){
         temp = temp + Character.toString((char)c);
       }
       output = temp;
-
       fis.close();
     }catch (FileNotFoundException e){
       e.printStackTrace();

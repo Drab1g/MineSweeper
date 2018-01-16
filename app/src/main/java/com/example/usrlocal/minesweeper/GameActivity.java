@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.GridView;
 import android.widget.TextView;
 
@@ -17,6 +18,7 @@ public class GameActivity extends AppCompatActivity {
 
   private TextView timerDisplayed;
   private TextView mineCounter;
+  private TextView resetButton;
 
   private GridView mineGridView;
   private GridView buttonGridView;
@@ -30,6 +32,7 @@ public class GameActivity extends AppCompatActivity {
   private boolean mode;
   private int mineNumber;
   private int myLevel;
+  private String level;
 
   private ServiceConnection myServiceConnection = new ServiceConnection() {
 
@@ -50,8 +53,10 @@ public class GameActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_game);
 
+    resetButton = (TextView) findViewById(R.id.resetButton);
+
     mode = getIntent().getBooleanExtra("mode", false);
-    String level = getIntent().getStringExtra("level");
+    level = getIntent().getStringExtra("level");
     myLevel=0;
     switch (level){
       case "EASY":
@@ -115,6 +120,16 @@ public class GameActivity extends AppCompatActivity {
       }
     };
     handler.postDelayed(runnableCode, 1000);
+
+    resetButton.setOnClickListener(new View.OnClickListener() {
+      public void onClick(View v) {
+        Intent gameActivity = new Intent(GameActivity.this, GameActivity.class);
+        gameActivity.putExtra("level", level);
+        gameActivity.putExtra("mode", mode);
+        isRunning=false;
+        startActivity(gameActivity);
+      }
+    });
   }
 
   public void endTheGame(boolean victory){

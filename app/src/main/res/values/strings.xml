@@ -6,4 +6,5 @@
     <string name="hard_button_text">Difficile</string>
     <string name="list_scores">Top 10 des scores</string>
     <string name="tryAgain">Try Again</string>
+  <string name="enregistrer">enregistrer</string>
 </resources>

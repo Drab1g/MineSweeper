@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,6 +83,7 @@ public class GameActivity extends AppCompatActivity {
 
     timerDisplayed = (TextView) findViewById(R.id.timer);
     mineCounter = (TextView)findViewById(R.id.mineCount);
+
 
     mineCounter.setText(Integer.toString(mineNumber));
 
@@ -162,86 +164,10 @@ public class GameActivity extends AppCompatActivity {
         editor.putString("HighScore_LV"+ myLevel +"_Time",Integer.toString(myTimerUp.getCounter()));
         editor.commit();
       }
-      saveScoreInFile();
     }
 
   }
 
-  public void saveScoreInFile(){
-    FileOutputStream fos;
-    if(!fileExist(FILE)){
-      try{
-        fos = openFileOutput(FILE,Context.MODE_PRIVATE);
-        String toInject = "||";
-        fos.write(toInject.getBytes());
-        fos.close();
-      }catch (FileNotFoundException e){
-        e.printStackTrace();
-      }catch (IOException e){
-        e.printStackTrace();
-      }
-    }
 
-    FileInputStream fis;
-    String output="";
-    try{
-      fis = openFileInput(FILE);
-      byte[] buffer = new byte[1024];
-      while(fis.read(buffer)!=-1){
-        output = new String(buffer);
-      }
-      fis.close();
-    }catch (FileNotFoundException e){
-      e.printStackTrace();
-    }catch (IOException e){
-      e.printStackTrace();
-    }
-    String scoresByLvl[] = output.split("|");
-    String currentLvlScores = scoresByLvl[myLevel-1];
-    if(currentLvlScores==""){
-      currentLvlScores = Integer.toString(myTimerUp.getCounter());
-    }else{
-      currentLvlScores+=";";
-      currentLvlScores+=Integer.toString(myTimerUp.getCounter());
-    }
-    scoresByLvl[myLevel-1] = currentLvlScores;
-    output = scoresByLvl[0] + "|" + scoresByLvl[1]  + "|" +  scoresByLvl[2];
-
-    try{
-      fos = openFileOutput(FILE,Context.MODE_PRIVATE);
-      fos.write(output.getBytes());
-      fos.close();
-    }catch (FileNotFoundException e){
-      e.printStackTrace();
-    }catch (IOException e){
-      e.printStackTrace();
-    }
-
-    readFileToast();
-
-  }
-
-  public void readFileToast(){
-    FileInputStream fis;
-    String output="";
-    try{
-      fis = openFileInput(FILE);
-      byte[] buffer = new byte[1024];
-      while(fis.read(buffer)!=-1){
-        output = new String(buffer);
-      }
-      fis.close();
-      Toast.makeText(this,output,Toast.LENGTH_LONG).show();
-    }catch (FileNotFoundException e){
-      e.printStackTrace();
-    }catch (IOException e){
-      e.printStackTrace();
-    }
-  }
-
-  public boolean fileExist(String fname){
-    File file = getBaseContext().getFileStreamPath(fname);
-    return file.exists();
-  }
 }
 
